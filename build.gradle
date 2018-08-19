@@ -1,0 +1,42 @@
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'com.bmuschko.tomcat'
+
+version '1.0'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+compileJava.options.encoding = 'Shift_JIS'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.bmuschko:gradle-tomcat-plugin:2.3'
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+tomcat{
+    contextPath = 'demo'
+}
+
+dependencies {
+    compile("javax.servlet:jstl:1.2")
+    compileOnly("org.projectlombok:lombok:1.16.18")
+    providedCompile("javax.servlet:servlet-api:2.4")
+    def tomcatVersion = '8.0.38'
+    tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
+            "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}",
+            "org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}",
+            "org.apache.tiles:tiles-jsp:3.0.7"
+}
+
+[tomcatRun, tomcatRunWar, tomcatStop]*.stopPort = 8090
+[tomcatRun, tomcatRunWar, tomcatStop]*.stopKey = 'foo'
